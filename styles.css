@@ -69,21 +69,20 @@ body {
 .rail-logo {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   text-decoration: none;
 }
 
 .rail-logo-mark {
-  width: 18px;
-  height: 18px;
-  border-radius: 3px;
-  background:
-    linear-gradient(90deg, #ffcf4a 0 34%, transparent 34%),
-    linear-gradient(90deg, transparent 0 40%, #ff5f6d 40% 70%, transparent 70%),
-    linear-gradient(90deg, transparent 0 76%, #5b9dff 76%);
-  opacity: .9;
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  opacity: .92;
+  transition: opacity .12s;
 }
+
+.rail-logo:hover .rail-logo-mark { opacity: 1; }
 
 .rail-nav {
   margin-top: auto;

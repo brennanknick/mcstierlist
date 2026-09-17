@@ -7,8 +7,14 @@ index.html    page shell
 styles.css    all styling
 app.js        renders the board (don't need to touch this)
 data.js       ← the only file you edit to update the list
+assets/       logo, favicons, social card (all generated from the MCS logo)
 .nojekyll     stops GitHub Pages hiding files that start with "_"
 ```
+
+`assets/` holds `mcs-logo.png` (transparent, used in the sidebar),
+`favicon.ico` + `icon-180/512.png` (dark plate, so they read on a light browser
+tab) and `og.png`, the 1200x630 card Discord shows when the link is pasted.
+To regenerate them from a new logo, see the note at the bottom of this file.
 
 ---
 
@@ -135,3 +141,18 @@ Never point wildcard DNS (`*.example.com`) at Pages.
 
 Open `data.js` on github.com, click the pencil, edit, **Commit changes**. Live
 in about a minute, from any browser including a phone.
+
+
+---
+
+## Regenerating the icons
+
+All of `assets/` is derived from one square logo image. The source was white
+art on a black background, so luminance doubles as the alpha channel — that is
+what keeps the anti-aliased edges clean instead of crunchy. If the logo ever
+changes, the recipe is: autocrop to the art's bounding box, use grayscale as
+alpha for the transparent version, and composite onto `#0b0b0d` for the
+favicons (a transparent logo disappears on a light browser tab).
+
+Note `og:image` in `index.html` is an absolute URL — Discord and Twitter will
+not resolve a relative one. If the site ever moves, that URL has to move too.
