@@ -21,7 +21,7 @@ const TIER_DATA = {
     {
       tier: 1,
       color: "#ffcf4a",
-      high: ["DuckyWins", "MrTpot", "Cozyyy"],
+      high: ["DuckyWins", "MrTpot_", "Cozyyy"],
       low: ["Chaseler"],
     },
     {
@@ -34,19 +34,28 @@ const TIER_DATA = {
       tier: 3,
       color: "#ff5f6d",
       high: ["xdColdClaw"],
-      low: ["AadenOh", "ScarIsBad", "imnathy"],
+      low: ["AadenOh", "Saintzdid"],
     },
     {
       tier: 4,
       color: "#c084fc",
-      high: ["S8ns", "DrDillon", "2XXS", "DarkClip"],
-      low: ["Saintzdid", "CluLessBird", "Rouadian"],
+      high: ["s8ns", "DrDillon", "2XXS", "imnathy", "DarkClip"],
+      low: ["ScarIsBad", "CluLessBird", "Rouadian"],
     },
     {
       tier: 5,
       color: "#5b9dff",
-      high: ["MrBabbs", "Xeillious", "Hedrix"],
-      low: ["HiveG", "Gagerade_", "StreetQ", "Luvo_", "Belone132", "Zeke"],
+      high: ["MrBabbs", "HiveG"],
+      low: [
+        "Hedrix",
+        "Gagerade_",
+        "StreetQ",
+        "_Luvo",
+        "Belone132",
+        "CoolestGreen",
+        "Xeillious",
+        "Zeke",
+      ],
     },
     {
       tier: 6,
@@ -57,12 +66,11 @@ const TIER_DATA = {
     {
       tier: 7,
       color: "#8b96a5",
-      high: ["Bob", "Larpza", "Macy", "Striker"],
+      high: ["Bob", "Larpza", "StrikerLPB", "Cryptmonger", "Certi"],
       low: [
         "RoseRocket",
         "President",
         "TGGC",
-        "CoolestGreen",
         "Orange",
         "IceFox",
         "SixEyedJoker",
