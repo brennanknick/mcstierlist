@@ -99,11 +99,6 @@
       band.className = "band " + bandKey;
       band.dataset.band = bandKey;
 
-      const label = document.createElement("div");
-      label.className = "band-label";
-      label.innerHTML = `<b>${bandKey === "high" ? "high" : "low"} tier</b>`;
-      band.appendChild(label);
-
       if (!list.length) {
         const empty = document.createElement("div");
         empty.className = "band-empty";

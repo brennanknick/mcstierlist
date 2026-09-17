@@ -320,6 +320,7 @@ body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  padding-top: 8px;
   padding-bottom: 28px;
   scrollbar-width: thin;
   scrollbar-color: #26262c transparent;
@@ -342,28 +343,10 @@ body {
 }
 
 .band.high { background: color-mix(in srgb, var(--c) 3.5%, transparent); }
+
+/* the gap is the only thing separating the two shades of rail */
+.band + .band { margin-top: 9px; }
 .band.is-hidden { display: none; }
-
-.band-label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  height: 26px;
-  padding: 0 var(--pad-x);
-  font-size: 9.5px;
-  letter-spacing: .16em;
-  text-transform: uppercase;
-  color: var(--text-mute);
-  border-bottom: 1px solid var(--line-soft);
-  user-select: none;
-}
-
-.band-label b {
-  font-weight: 500;
-  color: color-mix(in srgb, var(--c) 78%, #ffffff);
-}
-
-.band.low .band-label b { color: color-mix(in srgb, var(--c) 52%, var(--text-mute)); }
 
 /* row */
 
