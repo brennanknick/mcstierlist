@@ -22,6 +22,13 @@
   let data = JSON.parse(JSON.stringify(window.TIER_DATA || TIER_DATA));
   const history = [];
   let dirty = false;
+  let saving = false;
+
+  /* What the repo held when this page loaded, and after each save. Dirtiness
+     and conflict detection are both measured against this — not against the
+     undo stack's depth, which stops being a proxy for "clean" the moment the
+     60-entry cap trims an entry. */
+  let savedTiers = JSON.stringify(data.tiers);
 
   /* ── toast ──────────────────────────────────────────────────── */
 
@@ -72,14 +79,22 @@
     dirty = v;
     $("dirty").textContent = v ? "unsaved changes" : "no changes";
     $("dirty").classList.toggle("is-dirty", v);
-    $("btn-save").disabled = !v;
+    $("btn-save").disabled = !v || saving;
+  }
+
+  function recheckDirty() {
+    setDirty(JSON.stringify(data.tiers) !== savedTiers);
   }
 
   $("btn-undo").addEventListener("click", () => {
     if (!history.length) return toast("nothing to undo");
+    // the editor holds raw indices into the old data; they are meaningless
+    // against the restored copy, so close it rather than let it write blind
+    closeEditor();
+    drag = null;
     data = JSON.parse(history.pop());
     render();
-    setDirty(history.length > 0);
+    recheckDirty();
   });
 
   window.addEventListener("beforeunload", (e) => {
@@ -223,7 +238,7 @@
       const at = insertionIndex(band, e.clientY);
       const line = document.createElement("div");
       line.className = "drop-line";
-      const rows = [...band.querySelectorAll(".row")];
+      const rows = [...band.querySelectorAll(".row:not(.is-dragging)")];
       if (at >= rows.length) band.appendChild(line);
       else band.insertBefore(line, rows[at]);
     });
@@ -267,13 +282,16 @@
     const dst = listOf(to.tier, to.band);
     if (!src || !dst) return;
 
+    if (from.index < 0 || from.index >= src.length) return;
+
     snapshot();
     const [name] = src.splice(from.index, 1);
 
-    // removing from earlier in the same list shifts the target down one
-    let at = to.index;
-    if (src === dst && from.index < to.index) at -= 1;
-    at = Math.max(0, Math.min(at, dst.length));
+    /* No shift correction here: insertionIndex() measures the band with the
+       dragged row filtered out, so to.index is already an index into the
+       post-removal list. Correcting again lands every same-band downward
+       drag one slot too high. */
+    const at = Math.max(0, Math.min(to.index, dst.length));
 
     dst.splice(at, 0, name);
     render();
@@ -344,6 +362,7 @@
 
   function nudge(delta) {
     const list = listOf(editing.tier, editing.band);
+    if (!list || editing.index < 0 || editing.index >= list.length) return;
     const to = editing.index + delta;
     if (to < 0 || to >= list.length) return;
     snapshot();
@@ -385,12 +404,38 @@
     return n;
   }
 
+  /* `skip` is the slot being edited, so re-applying an unchanged name is fine */
+  function findDupe(name, skip) {
+    const lower = name.toLowerCase();
+    for (const t of data.tiers) {
+      for (const band of ["high", "low"]) {
+        const list = t[band] || [];
+        for (let i = 0; i < list.length; i += 1) {
+          if (skip && skip.tier === t.tier && skip.band === band && skip.index === i)
+            continue;
+          if (list[i].toLowerCase() === lower) return t;
+        }
+      }
+    }
+    return null;
+  }
+
   $("edit-apply").addEventListener("click", () => {
     if (!editing) return;
     const v = validName($("edit-name").value);
     if (!v) return;
+
+    const list = listOf(editing.tier, editing.band);
+    if (!list || editing.index >= list.length) {
+      closeEditor();
+      return toast("that player moved — reopen them and try again", "err");
+    }
+
+    const dupe = findDupe(v, editing);
+    if (dupe) return toast(`${v} is already in tier ${dupe.tier}`, "err");
+
     snapshot();
-    listOf(editing.tier, editing.band)[editing.index] = v;
+    list[editing.index] = v;
     closeEditor();
     render();
   });
@@ -401,8 +446,13 @@
 
   $("edit-remove").addEventListener("click", () => {
     if (!editing) return;
+    const list = listOf(editing.tier, editing.band);
+    if (!list || editing.index >= list.length) {
+      closeEditor();
+      return toast("that player moved — reopen them and try again", "err");
+    }
     snapshot();
-    listOf(editing.tier, editing.band).splice(editing.index, 1);
+    list.splice(editing.index, 1);
     closeEditor();
     render();
   });
@@ -413,11 +463,7 @@
     const name = validName(raw);
     if (!name) return;
 
-    const dupe = data.tiers.find(
-      (t) =>
-        (t.high || []).some((n) => n.toLowerCase() === name.toLowerCase()) ||
-        (t.low || []).some((n) => n.toLowerCase() === name.toLowerCase())
-    );
+    const dupe = findDupe(name, null);
     if (dupe) return toast(`${name} is already in tier ${dupe.tier}`, "err");
 
     const last = data.tiers[data.tiers.length - 1];
@@ -573,41 +619,87 @@
           ? "token rejected (401) — it may be expired or wrong"
           : res.status === 403 || res.status === 404
           ? `no write access (${res.status}) — check the token has Contents: Read and write on ${CFG.repo}`
+          : res.status === 409 || res.status === 422
+          ? "someone else saved while you were editing — copy data.js to keep your edits, then reload"
           : `github said ${res.status}: ${msg}`
       );
     }
     return body;
   }
 
+  function b64decode(s64) {
+    const bin = atob(String(s64).replace(/\s/g, ""));
+    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+    return new TextDecoder().decode(bytes);
+  }
+
+  /* Read the tier data out of a data.js the server gave us. It is the same
+     file the public page already loads as a script, from our own repo. */
+  function tiersOf(text) {
+    try {
+      const parsed = new Function(text + ";\nreturn TIER_DATA;")();
+      return JSON.stringify(parsed.tiers);
+    } catch {
+      return null;
+    }
+  }
+
   async function save() {
+    if (saving) return;
     if (!getToken()) return openToken();
 
     const btn = $("btn-save");
+    saving = true;
     btn.disabled = true;
     btn.textContent = "saving…";
 
+    /* Freeze exactly what is being committed. Edits made while the request is
+       in flight must not be reported as saved. */
+    const payload = serialise();
+    const committed = JSON.stringify(data.tiers);
+    const mark = history.length;
+
     try {
-      // fetch the current sha — GitHub rejects a write without it, which is
-      // what stops two admins silently clobbering each other
       const cur = await gh(CFG.path + "?ref=" + CFG.branch, { cache: "no-store" });
+
+      /* The sha alone proves nothing here — we fetched it a moment ago, so it
+         always matches and GitHub always accepts the write. The window that
+         actually matters is page-load-to-save. So compare what the repo holds
+         now against what it held when this copy was taken. */
+      const remote = tiersOf(b64decode(cur.content));
+      if (remote !== null && remote !== savedTiers) {
+        throw new Error(
+          "someone else saved since you opened this page — copy data.js to " +
+            "keep your edits, then reload to get their version"
+        );
+      }
 
       await gh(CFG.path, {
         method: "PUT",
         body: JSON.stringify({
           message: "Update tier list via admin",
-          content: b64(serialise()),
+          content: b64(payload),
           sha: cur.sha,
           branch: CFG.branch,
         }),
       });
 
-      history.length = 0;
-      setDirty(false);
-      toast("saved — the live site updates in about a minute", "ok");
+      savedTiers = committed;
+
+      if (history.length === mark) {
+        history.length = 0;
+        setDirty(false);
+        toast("saved — the live site updates in about a minute", "ok");
+      } else {
+        // edited while uploading: those edits are real but not yet committed
+        recheckDirty();
+        toast("saved, but you edited while it uploaded — save again", "ok");
+      }
     } catch (err) {
       toast(String(err.message || err), "err");
       if (/401|403|404/.test(String(err.message))) openToken();
     } finally {
+      saving = false;
       btn.textContent = "save to github";
       btn.disabled = !dirty;
     }
@@ -635,11 +727,14 @@
     }
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
-      if (dirty) save();
+      if (dirty && !saving) save();
     }
     if ((e.ctrlKey || e.metaKey) && e.key === "z") {
       const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
-      if (!typing) {
+      // a chip click leaves focus on a BUTTON, so `typing` alone would let
+      // undo fire while the editor is open holding now-stale indices
+      const dialogOpen = !$("edit-overlay").hidden || !$("token-overlay").hidden;
+      if (!typing && !dialogOpen) {
         e.preventDefault();
         $("btn-undo").click();
       }

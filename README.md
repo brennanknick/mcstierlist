@@ -121,9 +121,14 @@ The default is `mcs-admin` — change it.
 
 ### If two admins edit at once
 
-The save reads the file's current version from GitHub and refuses to write over
-a newer one, so nobody silently overwrites anybody. The second person gets an
-error and should reload and redo their change.
+Saving compares what the repo holds *now* against what it held when your page
+loaded. If someone else saved in between, the write is refused before it is
+sent and you are told to copy your edits and reload.
+
+This matters because the obvious version of the check does not work: fetching
+the file's sha a few milliseconds before writing always returns the current one,
+so GitHub always accepts the write and the second admin silently reverts the
+first. The window that needs guarding is page-load-to-save, which can be hours.
 
 ---
 
