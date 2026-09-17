@@ -74,6 +74,16 @@
   railCount.textContent = String(players.length);
   railCount.title = players.length + " ranked players";
 
+  /* Failsafe: opacity 0 is only safe because something clears .reveal. If the
+     animation is cancelled or never fires its end event, strip it anyway so a
+     row can never be left invisible. */
+  setTimeout(() => {
+    document
+      .querySelectorAll(".row.reveal")
+      .forEach((r) => r.classList.remove("reveal"));
+  }, 3000);
+
+
   /* ── build the board ────────────────────────────────────────── */
 
   const rowIndex = []; // { el, player }
@@ -112,8 +122,11 @@
         );
 
         const row = document.createElement("div");
-        row.className = "row";
+        row.className = "row reveal";
         row.style.animationDelay = ti * 45 + i * 22 + "ms";
+        const unreveal = () => row.classList.remove("reveal");
+        row.addEventListener("animationend", unreveal, { once: true });
+        row.addEventListener("animationcancel", unreveal, { once: true });
         row.tabIndex = 0;
         row.setAttribute("role", "button");
         row.title = `${name} — ${p.rank}`;

@@ -124,6 +124,10 @@
 
   let drag = null; // { tier, band, index }
 
+  /* render() rebuilds the whole board on every edit. Replaying the entrance
+     animation each time made a single click look like a full page load. */
+  let firstPaint = true;
+
   function render() {
     const wrap = $("columns");
     wrap.innerHTML = "";
@@ -161,7 +165,7 @@
         }
 
         list.forEach((name, i) => {
-          band.appendChild(makeRow(name, t.tier, bandKey, i));
+          band.appendChild(makeRow(name, t.tier, bandKey, i, count - list.length + i));
         });
 
         wireBand(band);
@@ -173,11 +177,30 @@
     });
 
     $("rail-count").textContent = String(count);
+
+    if (firstPaint) {
+      firstPaint = false;
+      /* see app.js — a row must never be left stuck at opacity 0 */
+      setTimeout(() => {
+        document
+          .querySelectorAll(".row.reveal")
+          .forEach((r) => r.classList.remove("reveal"));
+      }, 3000);
+    }
   }
 
-  function makeRow(name, tier, band, index) {
+  function makeRow(name, tier, band, index, ordinal) {
     const row = document.createElement("div");
     row.className = "row";
+
+    if (firstPaint) {
+      row.classList.add("reveal");
+      row.style.animationDelay = Math.min(ordinal, 40) * 14 + "ms";
+      const unreveal = () => row.classList.remove("reveal");
+      row.addEventListener("animationend", unreveal, { once: true });
+      row.addEventListener("animationcancel", unreveal, { once: true });
+    }
+
     row.draggable = true;
     row.dataset.tier = String(tier);
     row.dataset.band = band;

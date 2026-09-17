@@ -359,6 +359,11 @@ body {
   cursor: pointer;
   border-bottom: 1px solid var(--line-soft);
   transition: background .1s, opacity .12s;
+}
+
+/* Opt-in, so a re-render doesn't replay the entrance on every row. Only the
+   first paint adds this class; the row drops it again on animationend. */
+.row.reveal {
   opacity: 0;
   animation: rowIn .24s ease forwards;
 }
@@ -368,8 +373,8 @@ body {
 .row:hover { background: #17171b; }
 .row:last-child { border-bottom-color: transparent; }
 
-/* !important is required: the rowIn reveal animation uses fill-mode
-   forwards, and an animated value outranks a normal declaration. */
+/* !important because a row still mid-reveal has an animated opacity, and an
+   animated value outranks a normal declaration. */
 .row.is-dim { opacity: .14 !important; }
 .row.is-hit { background: color-mix(in srgb, var(--c) 14%, transparent); }
 .row.is-hit .row-name { color: #fff; }
@@ -517,7 +522,12 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .row { opacity: 1; }
+
+  /* .reveal starts at opacity 0 and is meant to be animated up. With the
+     animation suppressed above, animationend never fires and the class never
+     drops — so this has to beat .row.reveal on specificity or every row stays
+     invisible. */
+  .row, .row.reveal { opacity: 1 !important; }
 }
 
 /* ── load failure banner ─────────────────────────────────────── */
