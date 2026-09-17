@@ -7,15 +7,14 @@
    exact Minecraft username in quotes, separated by commas.
    Head avatars are fetched automatically from the username.
 
-   Example:
-     { tier: 3, color: "#ff5f6d", high: ["Notch", "Dinnerbone"], low: [] }
+   Most edits are easier through admin.html, which rewrites this file.
    ------------------------------------------------------------------ */
 
 const TIER_DATA = {
   meta: {
     title: "MCS",
     subtitle: "tier list",
-    updated: "2026-09-16",
+    updated: "2026-09-17",
   },
 
   tiers: [
@@ -35,13 +34,13 @@ const TIER_DATA = {
       tier: 3,
       color: "#ff5f6d",
       high: ["xdColdClaw"],
-      low: ["AadenOh", "Saintzdid"],
+      low: ["AadenOh", "ScarIsBad", "imnathy"],
     },
     {
       tier: 4,
       color: "#c084fc",
-      high: ["S8ns", "DrDillon", "2XXS", "imnathy", "DarkClip"],
-      low: ["ScarIsBad", "CluLessBird", "Rouadian"],
+      high: ["S8ns", "DrDillon", "2XXS", "DarkClip"],
+      low: ["Saintzdid", "CluLessBird", "Rouadian"],
     },
     {
       tier: 5,
@@ -72,6 +71,5 @@ const TIER_DATA = {
     },
   ],
 
-  // Optional: put your Discord invite here to make the sidebar icon live.
   discord: "",
 };
