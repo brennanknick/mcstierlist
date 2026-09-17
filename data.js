@@ -21,7 +21,7 @@ const TIER_DATA = {
     {
       tier: 1,
       color: "#ffcf4a",
-      high: ["DuckyWins", "MrTpot_", "Cozyyy"],
+      high: ["DuckyWins", "MrTpot", "Cozyyy"],
       low: ["Chaseler"],
     },
     {
@@ -39,7 +39,7 @@ const TIER_DATA = {
     {
       tier: 4,
       color: "#c084fc",
-      high: ["s8ns", "DrDillon", "2XXS", "imnathy", "DarkClip"],
+      high: ["s8ns", "DrDillonn", "2XXS", "imnathy", "DarkClip"],
       low: ["ScarIsBad", "CluLessBird", "Rouadian"],
     },
     {
@@ -72,7 +72,7 @@ const TIER_DATA = {
         "President",
         "TGGC",
         "Orange",
-        "IceFox",
+        "IceFoxs",
         "SixEyedJoker",
         "Imabibee",
       ],
