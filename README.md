@@ -1,14 +1,20 @@
-# soccer — tier list
+# MCS — tier list
 
-A static PvP tier list. Four files, no build step, no backend, no database.
+A static PvP tier list. No build step, no backend, no database.
 
 ```
-index.html    page shell
-styles.css    all styling
-app.js        renders the board (don't need to touch this)
-data.js       ← the only file you edit to update the list
-assets/       logo, favicons, social card (all generated from the MCS logo)
-.nojekyll     stops GitHub Pages hiding files that start with "_"
+index.html       the public tier list
+styles.css       all styling
+app.js           renders the board
+data.js          ← the player data
+
+admin.html       the staff editor  ┐
+admin.css        its styling       │ see "Admin" below
+admin.js         its logic         │
+admin-config.js  password + repo   ┘
+
+assets/          logo, favicons, social card (generated from the MCS logo)
+.nojekyll        stops GitHub Pages hiding files that start with "_"
 ```
 
 `assets/` holds `mcs-logo.png` (transparent, used in the sidebar),
@@ -59,6 +65,65 @@ python -m http.server 8765 --directory tierlist
 
 Avatars come from `mc-heads.net` with a `minotar.net` fallback and a generic
 head if both fail. Both are free and need no API key.
+
+---
+
+## Admin
+
+**https://brennanknick.github.io/mcstierlist/admin.html**
+
+Click any player to open the editor: rename them, pick a tier, switch between
+high and low, nudge their position, or remove them. The `+` in the sidebar adds
+a player. On a desktop you can also drag rows between tiers. Then **save to
+github** and the live list updates in about a minute.
+
+`Ctrl`+`Z` undoes, `Ctrl`+`S` saves, `Esc` closes a dialog. The page warns you
+if you try to leave with unsaved changes.
+
+### Read this before handing it to anyone
+
+**The password is a sign on a door, not a lock.** This is a static site — there
+is no server running our code, so the check happens in the visitor's browser and
+someone who knows how can walk straight past it. It stops casual wandering. It
+is not security.
+
+**The GitHub token is the actual boundary.** That is why the token is *not* in
+the published files — each admin pastes their own copy into their own browser,
+where it is kept in that browser's localStorage and sent only to
+`api.github.com`. Scope it as narrowly as GitHub allows and the worst case if it
+leaks is that someone edits the tier list, which is what an admin can do anyway.
+Revoking it takes one click.
+
+If you ever want a real lock — staff type only a password, no tokens, nothing
+sensitive in the browser — that needs something server-side. A Cloudflare Worker
+holding the token as a secret is the small version of that, and it stays free.
+
+### Making the token
+
+1. [github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens)
+   → **Generate new token** → *Fine-grained*.
+2. **Repository access** → *Only select repositories* → pick **mcstierlist**.
+   Nothing else.
+3. **Permissions** → *Repository permissions* → **Contents: Read and write**.
+   Leave every other permission alone.
+4. Set an expiry you are happy to renew. Generate, copy the `github_pat_…`
+   string — GitHub shows it once.
+5. In the admin page, hit **save to github**; it asks for the token. Paste,
+   save. That browser remembers it.
+
+### Changing the password
+
+Open the admin page, expand **change password** at the bottom, type the new one,
+and paste the line it prints over `passwordHash` in `admin-config.js`. Commit
+that file.
+
+The default is `mcs-admin` — change it.
+
+### If two admins edit at once
+
+The save reads the file's current version from GitHub and refuses to write over
+a newer one, so nobody silently overwrites anybody. The second person gets an
+error and should reload and redo their change.
 
 ---
 

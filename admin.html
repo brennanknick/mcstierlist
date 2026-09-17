@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MCS — admin</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/favicon.ico" sizes="any" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin">
+
+<!-- ── lock screen ─────────────────────────────────────────────── -->
+<div class="lock" id="lock">
+  <form class="lock-box" id="lock-form">
+    <img class="lock-logo" src="assets/mcs-logo.png" alt="MCS" />
+    <h1 class="lock-title">tier list admin</h1>
+    <input type="password" id="lock-input" placeholder="password" autocomplete="current-password" spellcheck="false" />
+    <button type="submit" class="btn btn-primary">unlock</button>
+    <p class="lock-note" id="lock-note"></p>
+  </form>
+</div>
+
+<!-- ── admin board ─────────────────────────────────────────────── -->
+<div class="app" id="app" hidden>
+
+  <aside class="rail">
+    <a class="rail-logo" href="./" title="back to the tier list">
+      <img class="rail-logo-mark" src="assets/mcs-logo.png" alt="MCS" />
+    </a>
+    <nav class="rail-nav">
+      <button class="rail-btn" id="btn-add" title="Add a player">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      </button>
+      <button class="rail-btn" id="btn-undo" title="Undo last change">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h11a5 5 0 0 1 0 10h-6"/><polyline points="8,5 4,9 8,13"/></svg>
+      </button>
+      <span class="rail-sep"></span>
+      <a class="rail-btn" href="./" title="View the live list">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+      </a>
+    </nav>
+    <div class="rail-foot" id="rail-count">0</div>
+  </aside>
+
+  <main class="board">
+
+    <!-- toolbar -->
+    <div class="toolbar">
+      <span class="tool-tag">admin</span>
+      <span class="tool-dirty" id="dirty">no changes</span>
+      <span class="tool-spacer"></span>
+      <button class="btn" id="btn-export">copy data.js</button>
+      <button class="btn btn-primary" id="btn-save" disabled>save to github</button>
+    </div>
+
+    <p class="hint" id="hint">
+      drag a player onto another tier, or between the bright band (high tier)
+      and the dim one (low tier). drag within a band to reorder. click a name to
+      rename or remove.
+    </p>
+
+    <div class="columns" id="columns"></div>
+  </main>
+</div>
+
+<!-- ── token prompt ────────────────────────────────────────────── -->
+<div class="overlay" id="token-overlay" hidden>
+  <div class="card card-wide">
+    <button class="card-close" id="token-close" aria-label="Close">×</button>
+    <div class="card-pad">
+      <h2 class="card-name">GitHub token</h2>
+      <p class="card-copy">
+        Saving commits <code>data.js</code> to
+        <b id="token-repo">the repo</b>. That needs a fine-grained token with
+        <b>Contents: Read and write</b> on <i>that one repository only</i>.
+      </p>
+      <p class="card-copy dim">
+        It is stored in this browser only (localStorage) and is never published
+        to the site. Revoke it any time at
+        <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener noreferrer">github.com/settings/personal-access-tokens ↗</a>.
+      </p>
+      <input type="password" id="token-input" placeholder="github_pat_…" spellcheck="false" autocomplete="off" />
+      <div class="card-actions">
+        <button class="btn" id="token-forget">forget stored token</button>
+        <button class="btn btn-primary" id="token-save">save token</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── player editor ───────────────────────────────────────────── -->
+<div class="overlay" id="edit-overlay" hidden>
+  <div class="card">
+    <button class="card-close" id="edit-close" aria-label="Close">×</button>
+    <div class="card-pad">
+      <h2 class="card-name" id="edit-title">player</h2>
+
+      <label class="field-label" for="edit-name">minecraft username</label>
+      <input type="text" id="edit-name" spellcheck="false" autocomplete="off" />
+
+      <label class="field-label">tier</label>
+      <div class="chips" id="edit-tiers"></div>
+
+      <label class="field-label">band</label>
+      <div class="chips">
+        <button class="chip" data-band="high">high tier</button>
+        <button class="chip" data-band="low">low tier</button>
+      </div>
+
+      <label class="field-label">position in band</label>
+      <div class="chips">
+        <button class="chip" id="edit-up">↑ move up</button>
+        <button class="chip" id="edit-down">↓ move down</button>
+        <span class="pos-readout" id="edit-pos"></span>
+      </div>
+
+      <div class="card-actions">
+        <button class="btn btn-danger" id="edit-remove">remove</button>
+        <button class="btn btn-primary" id="edit-apply">apply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── change password ─────────────────────────────────────────── -->
+<div class="pw-tool">
+  <details>
+    <summary>change password</summary>
+    <p>
+      Type a new password to get the line to paste over
+      <code>passwordHash</code> in <code>admin-config.js</code>.
+    </p>
+    <input type="text" id="pw-input" placeholder="new password" spellcheck="false" autocomplete="off" />
+    <pre id="pw-out" hidden></pre>
+  </details>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="admin-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
