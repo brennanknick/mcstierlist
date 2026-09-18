@@ -534,7 +534,6 @@
 
     let out = HEADER + "\nconst TIER_DATA = {\n  meta: {\n";
     out += `    title: ${q(m.title || "MCS")},\n`;
-    out += `    subtitle: ${q(m.subtitle || "tier list")},\n`;
     out += `    updated: ${q(today)},\n`;
     out += "  },\n\n  tiers: [\n";
 

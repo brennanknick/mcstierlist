@@ -334,7 +334,7 @@
   /* ── title ──────────────────────────────────────────────────── */
 
   if (D.meta && D.meta.title) {
-    document.title = `${D.meta.title} — ${D.meta.subtitle || "tier list"}`;
+    document.title = D.meta.title;
   }
   }
 

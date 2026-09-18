@@ -13,7 +13,6 @@
 const TIER_DATA = {
   meta: {
     title: "MCS",
-    subtitle: "tier list",
     updated: "2026-09-17",
   },
 
