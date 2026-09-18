@@ -70,7 +70,7 @@ head if both fail. Both are free and need no API key.
 
 ## Admin
 
-**https://brennanknick.github.io/mcstierlist/admin.html**
+**https://tiers.mcsoccer.net/admin.html**
 
 Click any player to open the editor: rename them, pick a tier, switch between
 high and low, nudge their position, or remove them. The `+` in the sidebar adds
@@ -182,7 +182,7 @@ ranks or keys (that is "commercial use" and enforcement is a 503), and
    ```
 4. Repo → **Settings → Pages** → Source **Deploy from a branch** → branch
    `main`, folder `/ (root)` → **Save**. Live in ~1 minute at
-   `https://brennanknick.github.io/mcstierlist/`.
+   `https://tiers.mcsoccer.net/`.
 
 All asset paths here are already relative and all avatar URLs are already
 `https://`, so nothing breaks on the subpath or under enforced HTTPS.
