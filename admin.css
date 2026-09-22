@@ -1,0 +1,268 @@
+/* ==================================================================
+   MCS — admin
+   layered on top of styles.css; only what the editor adds
+   ================================================================== */
+
+body.admin { overflow: hidden; }
+
+/* ── lock screen ─────────────────────────────────────────────── */
+
+.lock {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg);
+  z-index: 80;
+  padding: 24px;
+}
+
+.lock-box {
+  width: min(320px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.lock-logo { width: 68px; height: 68px; object-fit: contain; opacity: .95; }
+
+.lock-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.lock input,
+.overlay input,
+.pw-tool input {
+  width: 100%;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13.5px;
+  outline: 0;
+}
+
+.lock input:focus,
+.overlay input:focus,
+.pw-tool input:focus { border-color: #3a3a46; }
+
+.lock-note {
+  margin: 0;
+  min-height: 16px;
+  font-size: 11.5px;
+  color: #ff8f8f;
+  letter-spacing: .02em;
+}
+
+/* ── buttons ─────────────────────────────────────────────────── */
+
+.btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: .04em;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: color .12s, border-color .12s, background .12s, opacity .12s;
+  white-space: nowrap;
+}
+
+.btn:hover:not(:disabled) { color: var(--text); border-color: #3a3a46; background: #1a1a1f; }
+.btn:disabled { opacity: .35; cursor: default; }
+
+.btn-primary {
+  color: #0b0b0d;
+  background: var(--text);
+  border-color: var(--text);
+  font-weight: 500;
+}
+.btn-primary:hover:not(:disabled) { background: #fff; color: #0b0b0d; border-color: #fff; }
+
+.btn-danger { color: #ff8f8f; border-color: #4a2723; }
+.btn-danger:hover:not(:disabled) { background: #1d1211; color: #ffb0b0; border-color: #6a3a34; }
+
+/* ── toolbar ─────────────────────────────────────────────────── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  flex: 0 0 52px;
+  padding: 0 var(--pad-x);
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.tool-tag {
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #ffcf4a;
+  border: 1px solid color-mix(in srgb, #ffcf4a 40%, transparent);
+  background: color-mix(in srgb, #ffcf4a 10%, transparent);
+  border-radius: 3px;
+  padding: 3px 7px;
+}
+
+.tool-dirty { font-size: 11.5px; color: var(--text-mute); }
+.tool-dirty.is-dirty { color: #ffcf4a; }
+.tool-spacer { flex: 1 1 auto; }
+
+.hint {
+  margin: 0;
+  padding: 9px var(--pad-x);
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--text-mute);
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
+}
+
+/* ── editable rows ───────────────────────────────────────────── */
+
+.admin .row { cursor: grab; }
+.admin .row:active { cursor: grabbing; }
+
+.admin .row.is-dragging { opacity: .3; }
+
+.admin .band.is-target {
+  background: color-mix(in srgb, var(--c) 11%, transparent);
+  outline: 1px dashed color-mix(in srgb, var(--c) 45%, transparent);
+  outline-offset: -1px;
+}
+
+/* where the row will land */
+.drop-line {
+  height: 2px;
+  background: var(--c);
+  margin: -1px 0;
+  border-radius: 1px;
+}
+
+.admin .band { min-height: 46px; }
+
+/* an empty band still has to be a drop target */
+.admin .band-empty { opacity: .5; }
+
+/* ── cards ───────────────────────────────────────────────────── */
+
+.card-wide { width: min(520px, 100%); }
+.card-pad { padding: 26px 24px 22px; }
+
+.card-copy {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+.card-copy.dim { color: var(--text-mute); }
+.card-copy code,
+.pw-tool code {
+  color: var(--text);
+  background: #1e1e24;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.card-copy a { color: var(--text-dim); }
+
+.field-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-mute);
+  margin: 14px 0 6px;
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+/* ── change-password tool ────────────────────────────────────── */
+
+.pw-tool {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  padding: 8px var(--pad-x);
+  background: var(--panel);
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--text-mute);
+  z-index: 40;
+}
+
+.pw-tool summary { cursor: pointer; letter-spacing: .06em; }
+.pw-tool summary:hover { color: var(--text-dim); }
+.pw-tool p { margin: 10px 0 8px; line-height: 1.6; max-width: 620px; }
+.pw-tool input { max-width: 320px; margin-bottom: 8px; }
+
+.pw-tool pre {
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 11px;
+  overflow-x: auto;
+  user-select: all;
+}
+
+/* keep the board clear of the fixed bar */
+.admin .col-body { padding-bottom: 60px; }
+
+/* ── toast ───────────────────────────────────────────────────── */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 54px;
+  transform: translateX(-50%);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-left: 2px solid #ffcf4a;
+  border-radius: 4px;
+  padding: 11px 16px;
+  font-size: 12px;
+  color: var(--text);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, .55);
+  z-index: 90;
+  max-width: min(520px, calc(100vw - 32px));
+  animation: drop .16s ease;
+}
+
+.toast.is-err { border-left-color: #ff5f6d; color: #ffb0b0; }
+.toast.is-ok  { border-left-color: #2dd4bf; }
+
+/* ── editor controls ─────────────────────────────────────────── */
+
+.overlay .chips { gap: 5px; }
+
+.overlay .chip:disabled { opacity: .3; cursor: default; }
+.overlay .chip:disabled:hover { color: var(--text-mute); border-color: var(--line); }
+
+.pos-readout {
+  align-self: center;
+  margin-left: 4px;
+  font-size: 11px;
+  color: var(--text-mute);
+  font-variant-numeric: tabular-nums;
+}
+
+.card-pad .field-label:first-of-type { margin-top: 4px; }
