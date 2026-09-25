@@ -56,10 +56,10 @@ const TIER_DATA = {
       low: [
         "StreetQ",
         "Purgutory",
-        "LemonBurger14",
         "Gagerade_",
-        "Belone132",
         "Lawings",
+        "Belone132",
+        "LemonBurger14",
         "Sputtered",
         "cga",
         "_Luvo",
