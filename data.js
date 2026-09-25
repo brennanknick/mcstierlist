@@ -13,7 +13,7 @@
 const TIER_DATA = {
   meta: {
     title: "MCS",
-    updated: "2026-09-22",
+    updated: "2026-09-25",
   },
 
   tiers: [
@@ -21,12 +21,12 @@ const TIER_DATA = {
       tier: 1,
       color: "#ffcf4a",
       high: ["DuckyWins", "MrTpot", "Cozyyy"],
-      low: ["Chaseler"],
+      low: ["Chaseler", "Lngr"],
     },
     {
       tier: 2,
       color: "#ff9a3c",
-      high: [],
+      high: ["NotQC1"],
       low: ["Sflucx"],
     },
     {
@@ -39,24 +39,25 @@ const TIER_DATA = {
       tier: 4,
       color: "#c084fc",
       high: [
-        "s8ns",
+        "beefourr",
         "DrDillonn",
-        "2XXS",
-        "imnathy",
-        "DarkClip",
         "ScarIsBad",
+        "imnathy",
+        "s8ns",
+        "2XXS",
+        "DarkClip",
       ],
       low: ["Peng2k", "CluLessBird", "Rouadian", "DoctrDoom"],
     },
     {
       tier: 5,
       color: "#5b9dff",
-      high: ["MrBabbs", "HiveG"],
+      high: ["Belone132", "HiveG", "MrBabbs", "StreetQ"],
       low: [
-        "StreetQ",
+        "Purgutory",
+        "LemonBurger14",
         "Gagerade_",
         "Lawings",
-        "Belone132",
         "Sputtered",
         "cga",
         "_Luvo",
