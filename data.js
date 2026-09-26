@@ -13,7 +13,7 @@
 const TIER_DATA = {
   meta: {
     title: "MCS",
-    updated: "2026-09-25",
+    updated: "2026-09-26",
   },
 
   tiers: [
@@ -32,7 +32,7 @@ const TIER_DATA = {
     {
       tier: 3,
       color: "#ff5f6d",
-      high: ["xdColdClaw", "NotQC1"],
+      high: ["xdColdClaw"],
       low: ["AadenOh", "Saintzdid"],
     },
     {
@@ -44,6 +44,7 @@ const TIER_DATA = {
         "2XXS",
         "imnathy",
         "DarkClip",
+        "NotQC1",
         "ScarIsBad",
         "beefourr",
       ],
