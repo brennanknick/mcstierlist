@@ -13,7 +13,7 @@
 const TIER_DATA = {
   meta: {
     title: "MCS",
-    updated: "2026-09-27",
+    updated: "2026-09-28",
   },
 
   tiers: [
@@ -21,61 +21,58 @@ const TIER_DATA = {
       tier: 1,
       color: "#ffcf4a",
       high: ["DuckyWins", "MrTpot", "Cozyyy"],
-      low: ["Chaseler"],
+      low: [],
     },
     {
       tier: 2,
       color: "#ff9a3c",
-      high: ["Lngr"],
+      high: ["Chaseler", "Lngr"],
       low: [],
     },
     {
       tier: 3,
       color: "#ff5f6d",
       high: ["xdColdClaw"],
-      low: ["AadenOh", "Saintzdid"],
+      low: ["AadenOh", "beefourr"],
     },
     {
       tier: 4,
       color: "#c084fc",
       high: [
+        "Saintzdid",
         "DrDillonn",
-        "2XXS",
+        "NotQC1",
         "imnathy",
         "DarkClip",
-        "NotQC1",
+        "2XXS",
         "ScarIsBad",
-        "beefourr",
       ],
-      low: ["Peng2k", "Rouadian", "DoctrDoom"],
+      low: ["Peng2k", "Rouadian", "DoctrDoom", "OutDuel"],
     },
     {
       tier: 5,
       color: "#5b9dff",
-      high: ["HiveG", "MrBabbs"],
-      low: [
+      high: [
         "StreetQ",
         "Purgutory",
         "Gagerade_",
-        "Lawings",
         "Belone132",
-        "OutDuel",
+        "HiveG",
+        "MrBabbs",
+      ],
+      low: [
+        "Lawings",
         "Sputtered",
         "cga",
         "Hedrix",
         "Xeillious",
+        "duckudertruck",
       ],
     },
     {
       tier: 6,
       color: "#2dd4bf",
-      high: [
-        "Z3KE_",
-        "chefobama",
-        "SummerNature",
-        "duckudertruck",
-        "CoolestGreen",
-      ],
+      high: ["Z3KE_", "chefobama", "SummerNature", "CoolestGreen"],
       low: ["Samygain", "Frogmony", "sapwn", "Topothetop"],
     },
     {
