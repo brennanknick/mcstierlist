@@ -80,11 +80,11 @@ const TIER_DATA = {
       color: "#8b96a5",
       high: ["BOB20113", "Cryptmonger", "sau_cy"],
       low: [
-        "Certi",
         "iiWawq",
-        "Akameq_",
         "cflores10",
+        "Akameq_",
         "DannyV2",
+        "Certi",
         "HeadshotHotdog82",
         "TGGC",
         "SixEyedJoker",
