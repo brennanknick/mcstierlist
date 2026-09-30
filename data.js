@@ -13,7 +13,7 @@
 const TIER_DATA = {
   meta: {
     title: "MCS",
-    updated: "2026-09-28",
+    updated: "2026-09-30",
   },
 
   tiers: [
@@ -33,21 +33,13 @@ const TIER_DATA = {
       tier: 3,
       color: "#ff5f6d",
       high: ["xdColdClaw"],
-      low: ["AadenOh", "beefourr"],
+      low: ["beefourr", "NotQC1", "AadenOh"],
     },
     {
       tier: 4,
       color: "#c084fc",
-      high: [
-        "Saintzdid",
-        "DrDillonn",
-        "NotQC1",
-        "imnathy",
-        "DarkClip",
-        "2XXS",
-        "ScarIsBad",
-      ],
-      low: ["Peng2k", "Rouadian", "DoctrDoom", "OutDuel"],
+      high: ["Saintzdid", "DrDillonn", "imnathy", "ScarIsBad", "Peng2k"],
+      low: ["DarkClip", "DoctrDoom", "OutDuel", "Rouadian", "2XXS"],
     },
     {
       tier: 5,
