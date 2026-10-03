@@ -70,8 +70,9 @@ const TIER_DATA = {
     {
       tier: 7,
       color: "#8b96a5",
-      high: ["BOB20113", "Cryptmonger", "sau_cy", "BloonKitty"],
+      high: ["Cryptmonger", "sau_cy", "BloonKitty"],
       low: [
+        "BOB20113",
         "B5IB",
         "cflores10",
         "iiWawq",
@@ -83,6 +84,7 @@ const TIER_DATA = {
         "TGGC",
         "SixEyedJoker",
         "Imabibee",
+        "LGBTQI",
       ],
     },
   ],
