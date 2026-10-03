@@ -13,7 +13,7 @@
 const TIER_DATA = {
   meta: {
     title: "MCS",
-    updated: "2026-09-30",
+    updated: "2026-10-03",
   },
 
   tiers: [
@@ -81,6 +81,10 @@ const TIER_DATA = {
         "TGGC",
         "SixEyedJoker",
         "Imabibee",
+        "GloriousLegend",
+        "B5IB",
+        "Musheeyy",
+        "BloonKitty",
       ],
     },
   ],
